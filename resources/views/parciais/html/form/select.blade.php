@@ -1,0 +1,1 @@
+{!! Form::select($name, $options, old($name, $value), ['placeholder' => 'Selecione...', 'class' => 'form-control select2']); !!}

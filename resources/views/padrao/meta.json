@@ -1,0 +1,75 @@
+{
+	"campos": [
+		{
+			"nome": "descricao",
+			"descricao": "Descrição",
+			"tipo": "texto"
+		},
+		{
+			"nome": "sigla_fonte",
+			"descricao": "Sigla da Fonte",
+			"tipo": "texto"
+		},
+		{
+			"nome": "portaria",
+			"descricao": "Portaria",
+			"tipo": "texto"
+		},
+		{
+			"nome": "data_inicio_execucao",
+			"descricao": "Data Início Execução",
+			"tipo": "data"
+		},
+		{
+			"nome": "data_fim_execucao",
+			"descricao": "Data Fim Execução",
+			"tipo": "data"
+		},
+		{
+			"nome": "created_at",
+			"descricao": "Criado Em",
+			"tipo": "data",
+			"mascara": "mascara-data"
+		},
+		{
+			"nome": "tipo_fonte_id",
+			"descricao": "Tipo Fonte",
+			"tipo": "foreign",
+			"detalhes": {
+				"relacionamento": "tipo_fonte",
+				"repository": "App\\Repositories\\TipoFonteRepository",
+				"campos": ["descricao"],
+				"label": ":descricao",
+				"camposPesquisa": "descricao",
+				"chavePrimaria": "id",
+				"orderBy": "id desc"
+			} 
+		}
+	],
+	"todos": [
+		{ "nome": "descricao", "pesquisavel": true, "operador": "ilike" },
+		{ "nome": "sigla_fonte", "pesquisavel": true, "operador": "ilike" },
+		{ "nome": "portaria", "pesquisavel": true, "operador": "ilike" },
+		{ "nome": "data_inicio_execucao", "pesquisavel": true, "operador": "=" },
+		{ "nome": "data_fim_execucao", "pesquisavel": true, "operador": "="  },
+		{ "nome": "created_at", "pesquisavel": true, "operador": "="  },
+		{ "nome": "tipo_fonte_id", "pesquisavel": true, "operador": "=" }
+	],
+	"index": [
+		{ "nome": "descricao", "pesquisavel": true, "operador": "ilike" },
+		{ "nome": "sigla_fonte", "pesquisavel": true, "operador": "ilike" },
+		{ "nome": "portaria", "pesquisavel": true, "operador": "ilike" },
+		{ "nome": "data_inicio_execucao", "pesquisavel": false, "operador": "=" },
+		{ "nome": "data_fim_execucao", "pesquisavel": false, "operador": "=" },
+		{ "nome": "created_at", "pesquisavel": false, "operador": "=" },
+		{ "nome": "tipo_fonte_id", "pesquisavel": true, "operador": "=" }
+	],
+	"create": [
+		{ "nome": "descricao", "pesquisavel": true, "operador": "ilike" },
+		{ "nome": "sigla_fonte", "pesquisavel": true, "operador": "ilike" },
+		{ "nome": "portaria", "pesquisavel": true, "operador": "ilike" },
+		{ "nome": "data_inicio_execucao", "pesquisavel": true, "operador": "=" },
+		{ "nome": "data_fim_execucao", "pesquisavel": true, "operador": "="  },
+		{ "nome": "tipo_fonte_id", "pesquisavel": true, "operador": "=" }
+	]
+}

@@ -1,0 +1,245 @@
+<?php
+
+$NAMESPACE$
+
+use Illuminate\Http\Request;
+
+use $APPNAME$Http\Requests;
+use Prettus\Validator\Contracts\ValidatorInterface;
+use Prettus\Validator\Exceptions\ValidatorException;
+use $APPNAME$Http\Requests\$CLASS$CreateRequest;
+use $APPNAME$Http\Requests\$CLASS$UpdateRequest;
+use JsValidator;
+$REPOSITORY$
+$VALIDATOR$
+
+class $CONTROLLER$Controller extends BaseController
+{
+
+    /**
+     * @var string
+     */
+    public static $pluralName = '$PLURAL$';
+
+    /**
+     * @var string
+     */
+    public static $singleName = '$SINGULAR$';
+
+    /**
+     * 
+     */
+    /**
+     * @var $CLASS$Repository
+     */
+    protected $repository;
+
+    /**
+     * @var $CLASS$Validator
+     */
+    protected $validator;
+
+    public function __construct($CLASS$Repository $repository, $CLASS$Validator $validator)
+    {
+        parent::__construct();
+        
+        $this->repository = $repository;
+        $this->validator  = $validator;
+
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+        $$PLURAL$ = $this->repository->paginate(10);
+
+        if (request()->wantsJson()) {
+
+            return response()->json([
+                'data' => $$PLURAL$,
+            ]);
+        }
+
+        return view('$PLURAL$.index', ['models' => $$PLURAL$]);
+    }
+
+    /**
+     * Display a create form 
+     */
+    public function create()
+    {
+        $validacao = JsValidator::make($this->validator->getRules(ValidatorInterface::RULE_CREATE));
+
+        return view('$PLURAL$.create', [
+            'validacaoJS' => $validacao->render()
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  $CLASS$CreateRequest $request
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function store($CLASS$CreateRequest $request)
+    {
+
+        try {
+
+            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
+
+            $$SINGULAR$ = $this->repository->create($request->all());
+
+            $response = [
+                'message' => '$CLASS$ Criado com Sucesso.',
+                'data'    => $$SINGULAR$,
+            ];
+
+            if ($request->wantsJson()) {
+
+                return response()->json($response);
+            }
+
+            $controller = app()->make('metadata')->nomeController();
+
+            $sucesso =  "$controller@index";
+
+            if($request->has('cadastrarNovo')) {
+                $sucesso = "$controller@create";
+            }
+
+            return redirect()
+                ->action($sucesso)
+                ->with('message', $response);
+
+        } catch (ValidatorException $e) {
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'error'   => true,
+                    'message' => $e->getMessageBag()
+                ]);
+            }
+
+            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+        }
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int $id
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $$SINGULAR$ = $this->repository->find($id);
+
+        if (request()->wantsJson()) {
+
+            return response()->json([
+                'data' => $$SINGULAR$,
+            ]);
+        }
+
+        return view('$PLURAL$.show', ['model' => $$SINGULAR$]);
+    }
+
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int $id
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        
+        $$SINGULAR$ = $this->repository->find($id);
+
+        $validacao = JsValidator::make($this->validator->getRules(ValidatorInterface::RULE_UPDATE));
+
+        return view('$PLURAL$.edit', [
+            'model' => $$SINGULAR$,
+            'validacaoJS' => $validacao->render()
+        ]);
+    }
+
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  $CLASS$UpdateRequest $request
+     * @param  string            $id
+     *
+     * @return Response
+     */
+    public function update($CLASS$UpdateRequest $request, $id)
+    {
+
+        try {
+
+            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
+
+            $$SINGULAR$ = $this->repository->update($request->all(), $id);
+
+            $response = [
+                'message' => '$CLASS$ alterado com sucesso.',
+                'data'    => $$SINGULAR$,
+            ];
+
+            if ($request->wantsJson()) {
+
+                return response()->json($response);
+            }
+
+            $sucesso = app()->make('metadata')->nomeController() . '@index';
+
+            return redirect()->action($sucesso)->with('message', $response);
+
+        } catch (ValidatorException $e) {
+
+            if ($request->wantsJson()) {
+
+                return response()->json([
+                    'error'   => true,
+                    'message' => $e->getMessageBag()
+                ]);
+            }
+
+            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+        }
+    }
+
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int $id
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $deleted = $this->repository->delete($id);
+
+        if (request()->wantsJson()) {
+
+            return response()->json([
+                'message' => '$CLASS$ deletado com sucesso.',
+                'deleted' => $deleted,
+            ]);
+        }
+
+        return redirect()->back()->with('message', ['message'=>'$CLASS$ deletado com sucesso.']);
+    }
+}

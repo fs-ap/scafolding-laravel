@@ -1,0 +1,34 @@
+{
+	"campos": [
+		{
+			"nome": "descricao",
+			"descricao": "Descrição",
+			"tipo": "texto",
+			"required": true
+		},
+		{
+			"nome": "created_at",
+			"descricao": "Criado Em",
+			"tipo": "data",
+			"mascara": "mascara-data"
+		}
+	],
+	"todos": [
+		{
+			"nome": "descricao",
+			"operador": "ilike",
+			"pesquisavel": true
+		},
+		{
+			"nome": "created_at",
+			"operador": "=",
+			"pesquisavel": true
+		}
+	],
+	"index": [
+		{ "nome": "descricao", "operador": "ilike", "pesquisavel": true },
+		{ "nome": "created_at", "operador": "=", "pesquisavel": false }
+	],
+	"create": [ { "nome": "descricao" } ],
+	"edit": [ { "nome": "descricao" } ]
+}

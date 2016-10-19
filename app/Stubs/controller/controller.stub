@@ -1,0 +1,33 @@
+<?php
+
+$NAMESPACE$
+
+use Prettus\Validator\Contracts\ValidatorInterface;
+use Prettus\Validator\Exceptions\ValidatorException;
+use $APPNAME$Http\Requests\$CLASS$CreateRequest;
+use $APPNAME$Http\Requests\$CLASS$UpdateRequest;
+$REPOSITORY$
+$VALIDATOR$
+
+class $CONTROLLER$Controller extends ResourceController
+{
+
+    /**
+     * @var string
+     */
+    public static $pluralName = '$PLURAL$';
+
+    /**
+     * @var string
+     */
+    public static $singleName = '$SINGULAR$';
+
+    public function __construct($CLASS$Repository $repository, $CLASS$Validator $validator)
+    {
+        parent::__construct();
+        
+        $this->repository = $repository;
+        $this->validator  = $validator;
+
+    }
+}
